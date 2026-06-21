@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Адвокатский справочник | Военный и Гражданский адвокат</title>
+    <title>Адвокатский справочник | Полная версия</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -55,7 +55,7 @@
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
-            min-width: 280px;
+            min-width: 220px;
         }
         .main-nav-btn:hover {
             transform: translateY(-3px);
@@ -72,6 +72,12 @@
             border-color: #d4a574;
             color: #e6c49a;
             box-shadow: 0 8px 24px rgba(212, 165, 116, 0.3);
+        }
+        .main-nav-btn.active.questions {
+            background: linear-gradient(135deg, #3a1f4a 0%, #2e1430 100%);
+            border-color: #b388ff;
+            color: #d4b3ff;
+            box-shadow: 0 8px 24px rgba(179, 136, 255, 0.3);
         }
         .main-nav-btn.active.theory {
             background: linear-gradient(135deg, #1f4a3a 0%, #142e24 100%);
@@ -103,6 +109,7 @@
         }
         .sub-header.military { border-left: 5px solid #4a7c47; }
         .sub-header.civil { border-left: 5px solid #d4a574; }
+        .sub-header.questions { border-left: 5px solid #b388ff; }
         .sub-header.theory { border-left: 5px solid #1abc9c; }
         .sub-header.faq { border-left: 5px solid #58a6ff; }
         .sub-header h2 {
@@ -113,6 +120,7 @@
         }
         .sub-header.military h2 { color: #a8d5a3; }
         .sub-header.civil h2 { color: #d4a574; }
+        .sub-header.questions h2 { color: #d4b3ff; }
         .sub-header.theory h2 { color: #7ee7c0; }
         .sub-header.faq h2 { color: #58a6ff; }
         .sub-header p { color: #8b949e; }
@@ -149,6 +157,11 @@
             border-bottom-color: #d4a574;
             background: rgba(212, 165, 116, 0.08);
         }
+        .tab-btn.active.questions {
+            color: #d4b3ff;
+            border-bottom-color: #b388ff;
+            background: rgba(179, 136, 255, 0.08);
+        }
         .tab-btn.active.theory {
             color: #7ee7c0;
             border-bottom-color: #1abc9c;
@@ -182,6 +195,10 @@
             border-color: #4a7c47;
             box-shadow: 0 12px 32px rgba(74, 124, 71, 0.15);
         }
+        .card.questions-card:hover {
+            border-color: #b388ff;
+            box-shadow: 0 12px 32px rgba(179, 136, 255, 0.2);
+        }
         .card.theory-card:hover {
             border-color: #1abc9c;
             box-shadow: 0 12px 32px rgba(26, 188, 156, 0.2);
@@ -206,6 +223,7 @@
             flex: 1;
         }
         .card.military-card .card-title { color: #a8d5a3; }
+        .card.questions-card .card-title { color: #d4b3ff; }
         .card.theory-card .card-title { color: #7ee7c0; }
         .card.faq-card .card-title { color: #58a6ff; }
         .card-badge {
@@ -222,6 +240,10 @@
         .card.military-card .card-badge {
             background: rgba(74, 124, 71, 0.2);
             color: #a8d5a3;
+        }
+        .card.questions-card .card-badge {
+            background: rgba(179, 136, 255, 0.2);
+            color: #d4b3ff;
         }
         .card.theory-card .card-badge {
             background: rgba(26, 188, 156, 0.2);
@@ -282,7 +304,7 @@
             color: #7ee787;
             font-size: 0.9em;
         }
-        .warning {
+        .warning-box {
             background: rgba(255, 193, 7, 0.1);
             border-left: 4px solid #ffc107;
             padding: 12px;
@@ -297,11 +319,12 @@
             color: #e6c49a;
             margin: 12px 0;
             padding: 14px 16px;
-            background: rgba(26, 188, 156, 0.08);
-            border-left: 4px solid #1abc9c;
+            background: rgba(179, 136, 255, 0.08);
+            border-left: 4px solid #b388ff;
             border-radius: 6px;
             font-style: italic;
             line-height: 1.5;
+            position: relative;
         }
         .lawyer-question::before {
             content: '💬';
@@ -380,11 +403,14 @@
             <button class="main-nav-btn civil" data-section="civil">
                 🏛️ Гражданский адвокат
             </button>
+            <button class="main-nav-btn questions" data-section="questions">
+                🎯 Вопросы сотрудникам
+            </button>
             <button class="main-nav-btn theory" data-section="theory">
                 📚 Теория УК РФ
             </button>
             <button class="main-nav-btn faq" data-section="faq">
-                ❓ Вопросы и ответы
+                ❓ FAQ
             </button>
         </div>
 
@@ -439,6 +465,41 @@
                             <span class="legal-ref">Ст. 53 УПК РФ<br>Ст. 49 ФЗ №103 «О содержании под стражей»</span>
                         </div>
                     </div>
+
+                    <div class="card military-card" data-search="требование покинуть кабинет">
+                        <div class="card-header">
+                            <h3 class="card-title">Право требовать покинуть помещение</h3>
+                            <span class="card-badge important">ВАЖНО</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Когда адвокат может требовать покинуть кабинет:</span>
+                            <p class="card-text">1. <strong>Нарушение адвокатской тайны</strong> — если в помещении присутствуют посторонние лица во время конфиденциальной беседы с доверителем<br>
+                            2. <strong>Незаконное присутствие</strong> — если лица без процессуального статуса находятся в помещении во время следственного действия<br>
+                            3. <strong>Угроза безопасности</strong> — если присутствуют лица, угрожающие адвокату или доверителю<br>
+                            4. <strong>Нарушение процедуры</strong> — если следователь допускает лиц, не указанных в протоколе</p>
+                            <span class="card-label">Основания:</span>
+                            <p class="card-text">Адвокат вправе заявить ходатайство об удалении посторонних лиц. При отказе — занести возражение в протокол и подать жалобу (ст. 123-125 УПК РФ).</p>
+                            <span class="legal-ref">Ст. 53 УПК РФ (права защитника)<br>Ст. 8 ФЗ №63 (адвокатская тайна)</span>
+                        </div>
+                    </div>
+
+                    <div class="card military-card" data-search="рекомендация совет">
+                        <div class="card-header">
+                            <h3 class="card-title">Право давать рекомендации</h3>
+                            <span class="card-badge">Ст. 6 ФЗ №63</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Адвокат вправе:</span>
+                            <p class="card-text">• Давать консультации и справки по правовым вопросам<br>
+                            • Составлять заявления, жалобы, ходатайства и иные документы правового характера<br>
+                            • Представлять интересы доверителя в органах власти и судах<br>
+                            • Рекомендовать стратегию защиты (молчать, давать показания, заключить соглашение и т.д.)</p>
+                            <div class="info-box">
+                                Адвокат дает рекомендации, но решение всегда принимает доверитель. Адвокат НЕ вправе действовать вопреки воле доверителя (кроме случаев, когда адвокат убежден в самооговоре).
+                            </div>
+                            <span class="legal-ref">Ст. 6 ФЗ №63 «Об адвокатуре»<br>Ст. 11 Кодекса профессиональной этики</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -453,6 +514,21 @@
                             <span class="card-label">Основные права военнослужащих:</span>
                             <p class="card-text">• Свобода слова и выражения мнений (с учетом воинской дисциплины)<br>• Право на защиту чести, достоинства и здоровья<br>• Денежное довольствие, жилье, медицинское обеспечение<br>• Отпуска (основной, дополнительный, по личным обстоятельствам)<br>• Право на обжалование приказов командира</p>
                             <span class="legal-ref">ФЗ №76-ФЗ от 27.05.1998</span>
+                        </div>
+                    </div>
+
+                    <div class="card military-card" data-search="устав дисциплинарный">
+                        <div class="card-header">
+                            <h3 class="card-title">Дисциплинарный устав ВС РФ</h3>
+                            <span class="card-badge">Указ №1495</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Виды дисциплинарных взысканий:</span>
+                            <p class="card-text">• Замечание, выговор, строгий выговор<br>• Лишение нагрудного знака<br>• Предупреждение о неполном служебном соответствии<br>• Снижение в должности, в звании<br>• Увольнение с военной службы<br>• Дисциплинарный арест (до 30 суток — <strong>только для солдат/сержантов</strong>)</p>
+                            <div class="critical-warning">
+                                Офицеры и прапорщики НЕ подлежат дисциплинарному аресту (ст. 51 Дисциплинарного устава, ст. 2 ФЗ №60).
+                            </div>
+                            <span class="legal-ref">Указ Президента РФ №1495 от 10.11.2007</span>
                         </div>
                     </div>
                 </div>
@@ -482,6 +558,12 @@
                                 <td><strong>Ч. 1:</strong> Самовольное оставление части с целью уклониться от службы полностью<br><strong>Ч. 2:</strong> Группой лиц, с оружием, в период военного положения</td>
                                 <td>До 7 лет (ч. 1)<br>От 3 до 10 лет (ч. 2)</td>
                             </tr>
+                            <tr>
+                                <td><strong>Неисполнение приказа</strong></td>
+                                <td>Ст. 332 УК РФ</td>
+                                <td><strong>Ч. 1:</strong> Умышленное неисполнение приказа<br><strong>Ч. 2:</strong> Группой лиц, повлекшее тяжкие последствия<br><strong>Ч. 3:</strong> В период военного положения/в БД</td>
+                                <td>До 5 лет (ч. 1)<br>До 10 лет (ч. 3)</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -498,6 +580,21 @@
                             <span class="card-label">Структура (с 2019 года):</span>
                             <p class="card-text">1. <strong>Военная коллегия ВС РФ</strong> (высшая инстанция)<br>2. <strong>Апелляционный военный суд</strong> (г. Власиха, Московская обл.)<br>3. <strong>Кассационный военный суд</strong> (г. Новосибирск)<br>4. <strong>Окружные (флотские) военные суды</strong><br>5. <strong>Гарнизонные военные суды</strong> (первая инстанция)</p>
                             <span class="legal-ref">ФКЗ №1-ФКЗ от 23.06.1999 (ред. 2019)</span>
+                        </div>
+                    </div>
+
+                    <div class="card military-card" data-search="обжалование приказа командира">
+                        <div class="card-header">
+                            <h3 class="card-title">Обжалование приказа командира</h3>
+                            <span class="card-badge important">СТ. 45 ФЗ №76</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Порядок:</span>
+                            <p class="card-text">1. Обжалование старшему командиру (начальнику)<br>2. Обращение в военную прокуратуру<br>3. Подача административного иска в военный суд (КАС РФ)</p>
+                            <div class="critical-warning">
+                                Обжалование приказа НЕ освобождает от его исполнения! Военнослужащий обязан исполнить приказ, а затем обжаловать.
+                            </div>
+                            <span class="legal-ref">Ст. 45 ФЗ №76 «О статусе военнослужащих»<br>Ст. 14 Устава внутренней службы</span>
                         </div>
                     </div>
                 </div>
@@ -520,6 +617,44 @@
 
             <div id="civ-rights" class="sub-section active">
                 <div class="cards-grid">
+                    <div class="card" data-search="требование покинуть кабинет">
+                        <div class="card-header">
+                            <h3 class="card-title">Право требовать покинуть помещение</h3>
+                            <span class="card-badge important">ВАЖНО</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Когда адвокат может требовать покинуть кабинет:</span>
+                            <p class="card-text">1. <strong>Нарушение адвокатской тайны</strong> — если в кабинете следователя/суда присутствуют посторонние (СМИ, родственники потерпевшего без статуса, оперативники без процессуальной роли)<br>
+                            2. <strong>Незаконное присутствие при следственном действии</strong> — если лица не указаны в постановлении/протоколе<br>
+                            3. <strong>Давление на доверителя</strong> — если присутствующие оказывают психологическое давление<br>
+                            4. <strong>Нарушение конфиденциальности</strong> — если беседа с доверителем не может быть конфиденциальной</p>
+                            <span class="card-label">Алгоритм действий:</span>
+                            <p class="card-text">1. Заявить устное ходатайство об удалении посторонних<br>2. При отказе — потребовать занести возражение в протокол<br>3. Подать жалобу прокурору или в суд (ст. 125 УПК РФ)<br>4. При необходимости — приостановить участие в действии до разрешения ходатайства</p>
+                            <span class="legal-ref">Ст. 53 УПК РФ<br>Ст. 8 ФЗ №63 (адвокатская тайна)<br>Ст. 18 ФЗ №63 (гарантии)</span>
+                        </div>
+                    </div>
+
+                    <div class="card" data-search="рекомендация совет клиенту">
+                        <div class="card-header">
+                            <h3 class="card-title">Право давать рекомендации</h3>
+                            <span class="card-badge">Ст. 6 ФЗ №63</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Адвокат вправе рекомендовать:</span>
+                            <p class="card-text">• <strong>Воспользоваться ст. 51 Конституции</strong> (не свидетельствовать против себя)<br>
+                            • <strong>Давать или не давать показания</strong> (тактика защиты)<br>
+                            • <strong>Заключить досудебное соглашение</strong> (гл. 40.1 УПК)<br>
+                            • <strong>Признать вину</strong> для особого порядка (гл. 40 УПК)<br>
+                            • <strong>Обжаловать действия следователя</strong><br>
+                            • <strong>Ходатайствовать об экспертизах</strong><br>
+                            • <strong>Выбрать меру пресечения</strong> (залог, домашний арест)</p>
+                            <div class="info-box">
+                                <strong>Важно:</strong> Адвокат дает профессиональные рекомендации, но окончательное решение всегда за доверителем. Адвокат НЕ может действовать вопреки воле клиента (кроме случаев самооговора — ст. 10 КПЭА).
+                            </div>
+                            <span class="legal-ref">Ст. 6 ФЗ №63 «Об адвокатуре»<br>Ст. 10 Кодекса профессиональной этики</span>
+                        </div>
+                    </div>
+
                     <div class="card" data-search="адвокатская тайна неприкосновенность">
                         <div class="card-header">
                             <h3 class="card-title">Адвокатская тайна</h3>
@@ -542,7 +677,7 @@
                         </div>
                         <div class="card-content">
                             <span class="card-label">Адвокат-защитник вправе:</span>
-                            <p class="card-text">1. Иметь свидания с подзащитным наедине<br>2. Собирать доказательства<br>3. Привлекать специалистов<br>4. Присутствовать при предъявлении обвинения<br>5. Участвовать в допросах, обысках<br>6. Знакомиться с материалами дела<br>7. Заявлять ходатайства и отводы<br>8. Приносить жалобы</p>
+                            <p class="card-text">1. Иметь свидания с подзащитным наедине<br>2. Собирать доказательства (опрос, истребование справок, привлечение специалистов)<br>3. Привлекать специалистов<br>4. Присутствовать при предъявлении обвинения<br>5. Участвовать в допросах, обысках, иных следственных действиях<br>6. Знакомиться с протоколами и материалами дела<br>7. Заявлять ходатайства и отводы<br>8. Приносить жалобы</p>
                             <span class="legal-ref">Ст. 53 УПК РФ</span>
                         </div>
                     </div>
@@ -558,8 +693,20 @@
                         </div>
                         <div class="card-content">
                             <span class="card-label">Когда обязательно:</span>
-                            <p class="card-text">1. Подозреваемый/обвиняемый не отказался от защитника<br>2. Несовершеннолетний<br>3. Физические/психические недостатки<br>4. Не владеет языком судопроизводства<br>5. Обвиняется в преступлении свыше 15 лет<br>6. Суд с участием присяжных<br>7. Особый порядок (гл. 40 УПК)</p>
+                            <p class="card-text">1. Подозреваемый/обвиняемый не отказался от защитника<br>2. Несовершеннолетний<br>3. Физические/психические недостатки (не может защищаться сам)<br>4. Не владеет языком судопроизводства<br>5. Обвиняется в преступлении, за которое может быть назначено более 15 лет, ПЛС или смертная казнь<br>6. Уголовное дело в суде с участием присяжных<br>7. Особый порядок судебного разбирательства (гл. 40 УПК)</p>
                             <span class="legal-ref">Ст. 51 УПК РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card" data-search="вступление в дело ст. 49">
+                        <div class="card-header">
+                            <h3 class="card-title">Вступление защитника в дело</h3>
+                            <span class="card-badge">Ст. 49, 50 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Момент допуска:</span>
+                            <p class="card-text">С момента:<br>• Возбуждения УД в отношении конкретного лица<br>• Фактического задержания (ст. 91, 92 УПК)<br>• Применения меры пресечения (кроме подписки о невыезде)<br>• Вручения уведомления о подозрении<br>• Начала иных мер процессуального принуждения</p>
+                            <span class="legal-ref">Ст. 49 УПК РФ</span>
                         </div>
                     </div>
                 </div>
@@ -576,7 +723,7 @@
                             <span class="card-label">Кто может быть представителем:</span>
                             <p class="card-text">Дееспособные лица с надлежаще оформленными полномочиями. С 2019 года представители в районных судах и выше должны иметь <strong>высшее юридическое образование</strong> или ученую степень.</p>
                             <span class="card-label">Документы:</span>
-                            <p class="card-text">• Доверенность (нотариальная — для граждан)<br>• Ордер + диплом о высшем юр. образовании</p>
+                            <p class="card-text">• Доверенность (нотариальная — для граждан, простая с печатью — для организаций)<br>• Ордер + диплом о высшем юр. образовании</p>
                             <span class="legal-ref">Ст. 49, 53, 54 ГПК РФ</span>
                         </div>
                     </div>
@@ -592,8 +739,458 @@
                         </div>
                         <div class="card-content">
                             <span class="card-label">Категории дел:</span>
-                            <p class="card-text">• Оспаривание нормативных и ненормативных актов<br>• Обжалование действий/бездействия госорганов<br>• Защита избирательных прав<br>• Дела о приостановлении/ликвидации объединений<br>• Помещение в психиатрический стационар<br>• Административный надзор</p>
+                            <p class="card-text">• Оспаривание нормативных и ненормативных актов<br>• Обжалование действий/бездействия госорганов и должностных лиц<br>• Защита избирательных прав<br>• Дела о приостановлении/ликвидации общественных объединений<br>• Помещение в психиатрический стационар<br>• Административный надзор</p>
+                            <span class="card-label">Обязательное представительство:</span>
+                            <p class="card-text">По делам КАС РФ представителями могут быть <strong>только адвокаты и лица с высшим юридическим образованием</strong>.</p>
                             <span class="legal-ref">КАС РФ от 08.03.2015</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== ВОПРОСЫ СОТРУДНИКАМ ========== -->
+        <div id="questions-section" class="section">
+            <div class="sub-header questions">
+                <h2>🎯 Вопросы адвоката сотрудникам</h2>
+                <p>Готовые формулировки для диалога с силовыми структурами и должностными лицами</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn questions active" data-tab="q-mvd">👮 МВД (Полиция)</button>
+                <button class="tab-btn questions" data-tab="q-fsb">🛡️ ФСБ</button>
+                <button class="tab-btn questions" data-tab="q-skr">🕵️ СКР (Следователь)</button>
+                <button class="tab-btn questions" data-tab="q-judge">👨‍⚖️ Суд</button>
+                <button class="tab-btn questions" data-tab="q-prosecutor">⚖️ Прокуратура</button>
+                <button class="tab-btn questions" data-tab="q-fsin">🔒 ФСИН</button>
+                <button class="tab-btn questions" data-tab="q-rosgvardia">🚨 Росгвардия</button>
+                <button class="tab-btn questions" data-tab="q-army">🪖 Армия</button>
+            </div>
+
+            <!-- ========== МВД ========== -->
+            <div id="q-mvd" class="sub-section active">
+                <div class="cards-grid">
+                    <div class="card questions-card" data-search="мвд полиция проверка документы основание улица">
+                        <div class="card-header">
+                            <h3 class="card-title">Проверка документов на улице</h3>
+                            <span class="card-badge">Ст. 13 ФЗ-3</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Сотрудник полиции останавливает гражданина и требует предъявить документы без объяснения причин.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Представьтесь, пожалуйста: должность, звание, ФИО. На каком конкретном основании вы проверяете документы моего доверителя? Прошу разъяснить основание в соответствии с п. 1 ч. 1 ст. 13 ФЗ №3-ФЗ "О полиции"».
+                            </div>
+                            <span class="card-label">Правовое обоснование:</span>
+                            <p class="card-text">Проверка документов возможна <strong>только при наличии оснований</strong>: подозрение в преступлении, розыск, повод к административному задержанию, проникновение на охраняемый объект.</p>
+                            <div class="critical-warning">
+                                Проверка документов без оснований — превышение должностных полномочий (ст. 286 УК РФ). Требуйте составления протокола.
+                            </div>
+                            <span class="legal-ref">Право: п. 1 ч. 1 ст. 13 ФЗ-3<br>Обязанность представиться: ч. 4 ст. 5 ФЗ-3</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="мвд задержание подозреваемый ст. 91 УПК">
+                        <div class="card-header">
+                            <h3 class="card-title">Задержание подозреваемого</h3>
+                            <span class="card-badge">Ст. 91 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Полицейские задерживают лицо без разъяснения оснований и прав.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«На каком основании вы задерживаете моего подзащитного? Прошу разъяснить конкретные основания по ст. 91 УПК РФ и немедленно разъяснить ему права по ст. 46 УПК РФ и ст. 51 Конституции РФ, а также обеспечить моё участие как защитника».
+                            </div>
+                            <div class="critical-warning">
+                                Протокол задержания должен быть составлен в течение <strong>3 часов</strong>, уведомление родственников — в течение <strong>12 часов</strong> (ст. 96 УПК). Судебное решение или освобождение — в течение <strong>48 часов</strong>.
+                            </div>
+                            <span class="legal-ref">Ст. 91, 92, 96 УПК РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="мвд личный досмотр понятые ст. 27.7 КоАП">
+                        <div class="card-header">
+                            <h3 class="card-title">Личный досмотр</h3>
+                            <span class="card-badge">Ст. 27.7 КоАП</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Сотрудник проводит досмотр вещей или одежды без понятых, ссылаясь на видеозапись.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Где двое понятых того же пола, что и досматриваемый? Видеозапись НЕ заменяет понятых согласно ст. 27.7 КоАП РФ. Без понятых любые результаты досмотра будут признаны недопустимыми доказательствами».
+                            </div>
+                            <div class="critical-warning">
+                                Личный досмотр без двух понятых того же пола — грубейшее нарушение. Требуйте составления протокола с полной описью изъятых предметов.
+                            </div>
+                            <span class="legal-ref">Ст. 27.7 КоАП РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="мвд допрос без адвоката ст. 75 УПК">
+                        <div class="card-header">
+                            <h3 class="card-title">Допрос без адвоката</h3>
+                            <span class="card-badge">Ст. 75 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Следователь или дознаватель начинает допрос подозреваемого без участия защитника.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Прошу немедленно прекратить следственное действие. Согласно ст. 51 УПК РФ, участие защитника обязательно. Любые показания, полученные без моего участия, будут признаны недопустимыми доказательствами в силу ст. 75 УПК РФ».
+                            </div>
+                            <span class="card-label">Также важно:</span>
+                            <p class="card-text">• Допрос не более <strong>4 часов подряд</strong><br>• Не более <strong>8 часов в день</strong><br>• Обязательный перерыв не менее <strong>1 часа</strong><br>• Запрет на ночной допрос (22:00–06:00)</p>
+                            <span class="legal-ref">Ст. 51, 75, 187-190 УПК РФ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== ФСБ ========== -->
+            <div id="q-fsb" class="sub-section">
+                <div class="cards-grid">
+                    <div class="card questions-card" data-search="фсб удостоверение представиться">
+                        <div class="card-header">
+                            <h3 class="card-title">Требование представиться</h3>
+                            <span class="card-badge">Ст. 16.1 ФЗ-40</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Сотрудник ФСБ обращается к гражданину, не представляясь.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«В соответствии со ст. 16.1 ФЗ №40 "О ФСБ", при обращении к гражданину вы ОБЯЗАНЫ представиться: назвать должность, звание, ФИО, а по требованию — предъявить служебное удостоверение. Прошу исполнить эту обязанность».
+                            </div>
+                            <div class="info-box">
+                                <strong>Исключение:</strong> При проведении ОРМ (оперативное внедрение, контрольная закупка, эксперимент) сотрудник вправе не предъявлять реальное удостоверение, чтобы не скомпрометировать мероприятие (ч. 5 ст. 5 ФЗ-144).
+                            </div>
+                            <span class="legal-ref">Ст. 16.1 ФЗ №40 «О ФСБ»<br>Ч. 5 ст. 5 ФЗ №144 «Об ОРД»</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="фсб орм решение суда прослушка">
+                        <div class="card-header">
+                            <h3 class="card-title">ОРМ с ограничением прав</h3>
+                            <span class="card-badge">Ст. 8 ФЗ-144</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">ФСБ проводит ОРМ, ограничивающие конституционные права (прослушка, СОРМ, обследование жилища).</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Предоставьте, пожалуйста, судебное решение на проведение ОРМ, ограничивающего конституционные права моего доверителя. Без судебного решения такие действия незаконны, а полученные результаты — недопустимые доказательства».
+                            </div>
+                            <span class="card-label">ОРМ, требующие судебного решения:</span>
+                            <p class="card-text">• Контроль и запись переговоров (ПН)<br>• Снятие информации с технических каналов связи<br>• Обследование жилища (негласное)<br>• Ограничение тайны переписки</p>
+                            <span class="legal-ref">Ч. 4 ст. 8 ФЗ №144 «Об ОРД»<br>Ст. 186 УПК РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="фсб возбуждение уголовного дела скр">
+                        <div class="card-header">
+                            <h3 class="card-title">Возбуждение УД</h3>
+                            <span class="card-badge">Ст. 151 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">ФСБ заявляет, что «возбуждает уголовное дело» по терроризму, госизмене, коррупции.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Уточните, пожалуйста: согласно ст. 151 УПК РФ, дела о терроризме (ст. 205 УК), госизмене (ст. 275), шпионаже (ст. 276), бандитизме (ст. 209) ведутся следователями СКР. ФСБ составляет только рапорт об обнаружении признаков преступления и передаёт материал. Прошу предоставить копию постановления СКР о возбуждении УД».
+                            </div>
+                            <div class="critical-warning">
+                                ФСБ самостоятельно ведёт следствие только по ограниченной категории дел: гостайна (ст. 283), киберпреступления против государства (ст. 272-274), незаконное пересечение границы (ст. 322).
+                            </div>
+                            <span class="legal-ref">Ст. 143, 151 УПК РФ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== СКР ========== -->
+            <div id="q-skr" class="sub-section">
+                <div class="cards-grid">
+                    <div class="card questions-card" data-search="скр обыск жилище решение суда ст. 182 УПК">
+                        <div class="card-header">
+                            <h3 class="card-title">Обыск в жилище</h3>
+                            <span class="card-badge">Ст. 182 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Следователь СКР начинает обыск в жилище без предъявления судебного решения.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Прошу предоставить судебное решение на производство обыска в жилище. Согласно ст. 25 Конституции и ст. 182 УПК РФ, обыск в жилище производится только по решению суда. Без него любые доказательства будут признаны недопустимыми (ст. 75 УПК)».
+                            </div>
+                            <div class="info-box">
+                                <strong>Исключение:</strong> В неотложных случаях (преследование по горячим следам, спасение жизни) обыск возможен без суда, но следователь обязан в течение <strong>24 часов</strong> уведомить судью и прокурора (ч. 5 ст. 165 УПК).
+                            </div>
+                            <span class="legal-ref">Ст. 25 Конституции РФ<br>Ст. 165, 182 УПК РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="скр допрос 4 часа перерыв ночь">
+                        <div class="card-header">
+                            <h3 class="card-title">Продолжительность допроса</h3>
+                            <span class="card-badge">Ст. 187 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Допрос длится более 4 часов подряд или в ночное время.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Прошу прервать допрос. Согласно ст. 187 УПК РФ, допрос не может длиться более 4 часов подряд, после чего обязателен перерыв не менее 1 часа для отдыха и питания. Общий лимит — 8 часов в день. Ночной допрос (22:00–06:00) запрещён, кроме неотложных случаев».
+                            </div>
+                            <div class="critical-warning">
+                                Наводящие вопросы, угрозы, шантаж, насилие, пытки при допросе — ст. 75 УПК РФ (недопустимые доказательства) + ст. 302 УК РФ (принуждение к даче показаний).
+                            </div>
+                            <span class="legal-ref">Ст. 187, 188, 189, 190 УПК РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="скр мера пресечения арест заключение ст. 108">
+                        <div class="card-header">
+                            <h3 class="card-title">Заключение под стражу</h3>
+                            <span class="card-badge">Ст. 108 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Следователь ходатайствует о заключении под стражу без достаточных оснований.</p>
+                            <span class="card-label">Вопрос адвоката (в суде):</span>
+                            <div class="lawyer-question">«Прошу отказать в ходатайстве. Заключение под стражу — исключительная мера, применяемая только при невозможности иной меры пресечения (ст. 97, 108 УПК). Прошу обосновать, почему подписка о невыезде, залог или домашний арест недостаточны. Предоставьте конкретные данные о намерении скрыться, угрозах свидетелям или уничтожении доказательств».
+                            </div>
+                            <span class="legal-ref">Ст. 97, 108, 109 УПК РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="скр недопустимые доказательства ст. 75">
+                        <div class="card-header">
+                            <h3 class="card-title">Исключение доказательств</h3>
+                            <span class="card-badge">Ст. 75 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Следствие использует доказательства, полученные с нарушением УПК.</p>
+                            <span class="card-label">Вопрос/ходатайство адвоката:</span>
+                            <div class="lawyer-question">«Заявляю ходатайство об исключении доказательств в соответствии со ст. 75 УПК РФ. Указанные доказательства получены с нарушением: [указать нарушение]. Они не имеют юридической силы и не могут быть положены в основу обвинения».
+                            </div>
+                            <span class="card-label">Типичные основания:</span>
+                            <p class="card-text">• Допрос без защитника (когда обязателен)<br>• Обыск без судебного решения<br>• Досмотр без понятых<br>• Неразъяснение прав<br>• Применение насилия/угроз<br>• Нарушение права на переводчика</p>
+                            <span class="legal-ref">Ст. 75 УПК РФ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== СУД ========== -->
+            <div id="q-judge" class="sub-section">
+                <div class="cards-grid">
+                    <div class="card questions-card" data-search="суд исключение доказательств ст. 75">
+                        <div class="card-header">
+                            <h3 class="card-title">Исключение доказательств</h3>
+                            <span class="card-badge">Ст. 75, 271 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">В суде сторона обвинения ссылается на доказательства с нарушением УПК.</p>
+                            <span class="card-label">Вопрос/ходатайство адвоката:</span>
+                            <div class="lawyer-question">«Ваша честь, заявляю ходатайство об исключении доказательств на основании ст. 75 УПК РФ. Доказательства обвинения получены с нарушением закона [указать конкретно], не имеют юридической силы и не могут использоваться в суде. Прошу удовлетворить ходатайство в соответствии с ч. 1 ст. 271 УПК РФ».
+                            </div>
+                            <span class="legal-ref">Ст. 75, 271 УПК РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="суд отвод судья прокурор">
+                        <div class="card-header">
+                            <h3 class="card-title">Заявление отвода</h3>
+                            <span class="card-badge">Ст. 61-64 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Есть основания полагать, что судья/прокурор/следователь заинтересован в исходе дела.</p>
+                            <span class="card-label">Вопрос/ходатайство адвоката:</span>
+                            <div class="lawyer-question">«Заявляю отвод [судье/прокурору/следователю] на основании [ст. 61, 62, 63 или 64 УПК]. Имеются обстоятельства, вызывающие сомнения в беспристрастности: [указать конкретно — родственные связи, личная заинтересованность, предыдущее участие в деле в ином качестве]».
+                            </div>
+                            <span class="legal-ref">Ст. 61, 62, 63, 64 УПК РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="суд приобщение доказательства защита">
+                        <div class="card-header">
+                            <h3 class="card-title">Приобщение доказательств защиты</h3>
+                            <span class="card-badge">Ст. 271 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Суд отказывается приобщить документы или доказательства, представленные защитой.</p>
+                            <span class="card-label">Вопрос/ходатайство адвоката:</span>
+                            <div class="lawyer-question">«Ваша честь, прошу приобщить к материалам дела следующие доказательства, представленные стороной защиты, в соответствии с ч. 2 ст. 271 УПК РФ. Суд НЕ ВПРАВЕ отказать в удовлетворении ходатайства о допросе лиц, исследовании документов и предметов, представленных защитой, если они имеют значение для дела».
+                            </div>
+                            <div class="critical-warning">
+                                Отказ в приобщении доказательств защиты — нарушение принципа состязательности сторон (ст. 15 УПК РФ) и основание для отмены приговора.
+                            </div>
+                            <span class="legal-ref">Ст. 15, 271 УПК РФ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== ПРОКУРАТУРА ========== -->
+            <div id="q-prosecutor" class="sub-section">
+                <div class="cards-grid">
+                    <div class="card questions-card" data-search="прокурор жалоба следователь ст. 124 УПК">
+                        <div class="card-header">
+                            <h3 class="card-title">Жалоба на следователя</h3>
+                            <span class="card-badge">Ст. 124 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Следователь нарушает права подзащитного, адвокат подаёт жалобу прокурору.</p>
+                            <span class="card-label">Вопрос/обращение адвоката:</span>
+                            <div class="lawyer-question">«В порядке ст. 124 УПК РФ прошу рассмотреть жалобу на действия (бездействие) следователя [ФИО] в течение 3 суток (до 10 суток в сложных случаях). Прошу признать действия незаконными и принять меры к устранению нарушений, а также к дисциплинарной ответственности виновных».
+                            </div>
+                            <span class="legal-ref">Ст. 124 УПК РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="прокурор надзор орд фсб">
+                        <div class="card-header">
+                            <h3 class="card-title">Надзор за ОРД</h3>
+                            <span class="card-badge">Ст. 21 ФЗ-144</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Есть основания полагать, что ФСБ проводит ОРМ с нарушением закона.</p>
+                            <span class="card-label">Вопрос/обращение адвоката:</span>
+                            <div class="lawyer-question">«В порядке надзора за исполнением законов органами, осуществляющими ОРД (ст. 21 ФЗ-144), прошу проверить законность проведения ОРМ [указать] в отношении моего доверителя. Прошу предоставить материалы ОРМ для проверки оснований и процедуры, а также рассекретить их при необходимости».
+                            </div>
+                            <span class="legal-ref">Ст. 21 ФЗ №144 «Об ОРД»<br>ФЗ №2202-1 «О прокуратуре РФ»</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== ФСИН ========== -->
+            <div id="q-fsin" class="sub-section">
+                <div class="cards-grid">
+                    <div class="card questions-card" data-search="фсин свидание адвокат ограничение">
+                        <div class="card-header">
+                            <h3 class="card-title">Свидание с подзащитным</h3>
+                            <span class="card-badge">Ст. 89 УИК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Администрация СИЗО/колонии отказывает в свидании с подзащитным или ограничивает его.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«На каком основании вы ограничиваете моё свидание с подзащитным? Согласно ст. 89 УИК РФ, свидания с адвокатом предоставляются без ограничений по числу и продолжительности, наедине и конфиденциально, БЕЗ прослушивания и стеклянной перегородки. Требую допуска по удостоверению и ордеру».
+                            </div>
+                            <div class="critical-warning">
+                                Прослушивание свиданий адвоката с подзащитным — грубейшее нарушение адвокатской тайны. Полученные сведения не имеют доказательственной силы.
+                            </div>
+                            <span class="legal-ref">Ст. 89 УИК РФ<br>Ст. 49 ФЗ №103</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="фсин шизо медосмотр">
+                        <div class="card-header">
+                            <h3 class="card-title">Водворение в ШИЗО</h3>
+                            <span class="card-badge">Ст. 115 УИК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Заключённого водворяют в ШИЗО без медицинского осмотра.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Прошу предоставить медицинскую справку о возможности содержания моего доверителя в ШИЗО. Согласно ст. 115 УИК РФ, перед водворением в ШИЗО ОБЯЗАТЕЛЬНО проводится медицинский осмотр. Без него водворение незаконно и подлежит немедленной отмене».
+                            </div>
+                            <span class="legal-ref">Ст. 115 УИК РФ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== РОСГВАРДИЯ ========== -->
+            <div id="q-rosgvardia" class="sub-section">
+                <div class="cards-grid">
+                    <div class="card questions-card" data-search="росгвардия применение сила спецсредства акт">
+                        <div class="card-header">
+                            <h3 class="card-title">Применение спецсредств</h3>
+                            <span class="card-badge">Ст. 20-22 ФЗ-226</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Сотрудник Росгвардии применил спецсредства (ПР, наручники, газ, водомёт).</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«На каком основании были применены спецсредства? Предупреждали ли вы о намерении их применить? Составлен ли акт о применении физической силы и спецсредств в соответствии со ст. 20-22 ФЗ №226? Уведомлён ли прокурор в течение 24 часов о причинении вреда здоровью? Прошу предоставить копию акта».
+                            </div>
+                            <span class="legal-ref">Ст. 20-23 ФЗ №226 «О войсках национальной гвардии»</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="росгвардия оцепление территория кто митинг">
+                        <div class="card-header">
+                            <h3 class="card-title">Оцепление территорий</h3>
+                            <span class="card-badge">Ст. 11 ФЗ-226</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Росгвардия оцепляет территорию, ограничивает движение.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«На каком основании производится оцепление территории? Прошу разъяснить, какое из оснований ст. 11 ФЗ №226 применяется: проведение КТО, пресечение массовых беспорядков, обеспечение безопасности при массовых мероприятиях или задержание вооружённых преступников. Какие документы оформлены?»
+                            </div>
+                            <span class="legal-ref">Ст. 11 ФЗ №226</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== АРМИЯ ========== -->
+            <div id="q-army" class="sub-section">
+                <div class="cards-grid">
+                    <div class="card questions-card" data-search="армия вп военная полиция гражданский улица">
+                        <div class="card-header">
+                            <h3 class="card-title">Задержание гражданских ВП</h3>
+                            <span class="card-badge">Ст. 14 УВС</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Военная полиция задерживает гражданского вне территории воинской части.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«На каком основании военная полиция задерживает моего доверителя — гражданского гражданина — вне территории воинской части? Согласно Уставу внутренней службы, ВП имеет полномочия только в отношении военнослужащих и на территории ВЧ. Задержание гражданских — компетенция МВД и Росгвардии».
+                            </div>
+                            <div class="critical-warning">
+                                Военная полиция НЕ вправе задерживать гражданских лиц вне территории воинской части. Это превышение полномочий (ст. 286 УК РФ).
+                            </div>
+                            <span class="legal-ref">Ст. 14 Устава внутренней службы ВС РФ</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="армия дисциплинарный арест офицер прапорщик гауптвахта">
+                        <div class="card-header">
+                            <h3 class="card-title">Дисциплинарный арест офицера</h3>
+                            <span class="card-badge">ФЗ №60</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Командир намерен подвергнуть офицера или прапорщика дисциплинарному аресту.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Обращаю внимание: согласно ст. 51 Дисциплинарного устава ВС РФ и ст. 2 ФЗ №60, офицеры и прапорщики НЕ подлежат дисциплинарному аресту. Применяя эту меру к моему доверителю-офицеру, вы совершаете превышение должностных полномочий. Прошу немедленно отменить постановление».
+                            </div>
+                            <div class="info-box">
+                                Дисциплинарный арест (до 30 суток на гауптвахте) применяется ТОЛЬКО к солдатам и сержантам, совершившим грубый дисциплинарный проступок.
+                            </div>
+                            <span class="legal-ref">Ст. 51 Дисциплинарного устава<br>ФЗ №60 «О дисциплинарном аресте военнослужащих»</span>
+                        </div>
+                    </div>
+
+                    <div class="card questions-card" data-search="армия пропуск адвокат кпп командование">
+                        <div class="card-header">
+                            <h3 class="card-title">Пропуск адвоката на ВЧ</h3>
+                            <span class="card-badge">Ст. 53 УПК</span>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Ситуация:</span>
+                            <p class="card-text">Дежурный по КПП отказывает адвокату в допуске, требуя согласования с командованием.</p>
+                            <span class="card-label">Вопрос адвоката:</span>
+                            <div class="lawyer-question">«Предъявляю удостоверение адвоката и ордер. Согласно ст. 53 УПК РФ и ст. 49 ФЗ №103, допуск адвоката к подзащитному-военнослужащему осуществляется БЕЗ согласования с командованием и КПП. Отказ в пропуске — нарушение УПК. Прошу выдать разовый пропуск и обеспечить свидание наедине и конфиденциально».
+                            </div>
+                            <div class="critical-warning">
+                                При отказе в допуске немедленно подавайте жалобу военному прокурору и в ВСО СКР. Составьте рапорт о нарушении прав.
+                            </div>
+                            <span class="legal-ref">Ст. 53 УПК РФ<br>Ст. 49 ФЗ №103</span>
                         </div>
                     </div>
                 </div>
@@ -642,11 +1239,8 @@
                         <div class="card-content">
                             <span class="card-label">4 категории (по степени общественной опасности):</span>
                             <p class="card-text">1. <strong>Небольшой тяжести</strong> — умышленные и неосторожные, за которые макс. наказание <strong>НЕ превышает 3 лет</strong> лишения свободы<br>2. <strong>Средней тяжести</strong> — умышленные до <strong>5 лет</strong>, неосторожные свыше 3 лет<br>3. <strong>Тяжкие</strong> — умышленные, макс. наказание <strong>до 10 лет</strong><br>4. <strong>Особо тяжкие</strong> — умышленные, за которые назначено <strong>свыше 10 лет</strong> или более строгое наказание</p>
-                            <div class="warning">
+                            <div class="warning-box">
                                 ⚠️ Только умышленные деяния могут быть тяжкими и особо тяжкими! Неосторожные — максимум средней тяжести.
-                            </div>
-                            <div class="info-box">
-                                Суд вправе изменить категорию на менее тяжкую (при наличии смягчающих обстоятельств и отсутствии отягчающих):<br>• с тяжких → средние (если назначено ≤5 лет)<br>• со средних → небольшие (если назначено ≤3 лет)<br>• с особо тяжких → тяжкие (если назначено ≤10 лет)
                             </div>
                             <span class="legal-ref">Ст. 15 УК РФ</span>
                         </div>
@@ -665,26 +1259,7 @@
                             <div class="critical-warning">
                                 Отсутствие хотя бы одного элемента состава = <strong>отсутствие состава преступления</strong> = основание для прекращения уголовного дела (п. 2 ч. 1 ст. 24 УПК РФ)!
                             </div>
-                            <span class="card-label">Виды составов:</span>
-                            <p class="card-text">• <strong>По степени опасности:</strong> основной, со смягчающими, с отягчающими обстоятельствами<br>• <strong>По конструкции:</strong> материальный (нужны последствия), формальный (достаточно деяния), усечённый (окончено с момента покушения)</p>
                             <span class="legal-ref">Ст. 8 УК РФ (основание уголовной ответственности)</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="малозначительность ст. 14">
-                        <div class="card-header">
-                            <h3 class="card-title">Малозначительность деяния</h3>
-                            <span class="card-badge">Ч. 2 ст. 14 УК</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">Суть:</span>
-                            <p class="card-text">Действие (бездействие), хотя формально и содержит признаки какого-либо деяния, предусмотренного УК, но в силу <strong>малозначительности</strong> не представляет общественной опасности и <strong>преступлением не является</strong>.</p>
-                            <span class="card-label">Критерии малозначительности:</span>
-                            <p class="card-text">• Размер вреда незначителен<br>• Отсутствие существенных последствий<br>• Характер содеянного<br>• Обстановка совершения<br>• Способ совершения<br>• Личность виновного</p>
-                            <div class="info-box">
-                                Малозначительность — основание для прекращения уголовного дела/отказа в возбуждении по п. 2 ч. 1 ст. 24 УПК РФ.
-                            </div>
-                            <span class="legal-ref">Ч. 2 ст. 14 УК РФ</span>
                         </div>
                     </div>
                 </div>
@@ -703,11 +1278,6 @@
                             <p class="card-text"><strong>Объект преступления</strong> — это охраняемые уголовным законом общественные отношения, на которые посягает преступление и которым причиняется вред или создаётся угроза причинения вреда.</p>
                             <span class="card-label">Виды объекта (по вертикали):</span>
                             <p class="card-text">1. <strong>Общий объект</strong> — вся совокупность охраняемых УК отношений (все 6 разделов)<br>2. <strong>Родовой объект</strong> — однородная группа отношений (раздел УК: личность, экономика, гос. власть)<br>3. <strong>Видовой объект</strong> — группа внутри раздела (глава УК: жизнь, собственность)<br>4. <strong>Непосредственный объект</strong> — конкретные отношения, которым причинён вред (конкретная статья УК)</p>
-                            <span class="card-label">Виды объекта (по горизонтали):</span>
-                            <p class="card-text">• <strong>Основной</strong> — на который направлено главное посягательство<br>• <strong>Дополнительный</strong> — которому обязательно причиняется вред (напр., при разбое — собственность + здоровье)<br>• <strong>Факультативный</strong> — которому вред может быть причинён, но не обязательно</p>
-                            <div class="info-box">
-                                <strong>Предмет преступления</strong> — вещь материального мира, на которую воздействует преступник (отличается от объекта!).<br><strong>Потерпевший</strong> — физическое или юридическое лицо, которому причинён вред.
-                            </div>
                             <span class="legal-ref">Ст. 2 УК РФ (задачи и объект защиты)</span>
                         </div>
                     </div>
@@ -722,11 +1292,6 @@
                             <p class="card-text"><strong>Объективная сторона</strong> — внешнее проявление преступления, его внешняя характеристика: действие/бездействие и их последствия.</p>
                             <span class="card-label">ОБЯЗАТЕЛЬНЫЕ признаки:</span>
                             <p class="card-text">1. <strong>Общественно опасное деяние</strong> (акт поведения):<br>&nbsp;&nbsp;• <em>Действие</em> — активное поведение<br>&nbsp;&nbsp;• <em>Бездействие</em> — пассивное, невыполнение обязанности<br>2. <strong>Общественно опасные последствия</strong> (для материальных составов)<br>3. <strong>Причинная связь</strong> между деянием и последствиями</p>
-                            <span class="card-label">ФАКУЛЬТАТИВНЫЕ признаки:</span>
-                            <p class="card-text">• <strong>Способ</strong> (жестокий, с оружием, группой лиц)<br>• <strong>Обстановка</strong> (во время войны, в условиях ЧС)<br>• <strong>Время</strong> (ночью, в период мобилизации)<br>• <strong>Место</strong> (в жилище, на территории ВЧ)<br>• <strong>Орудия и средства</strong> (оружие, транспорт)</p>
-                            <div class="critical-warning">
-                                <strong>Причинная связь</strong> — необходимое условие: последствие должно быть НЕОБХОДИМЫМ и ЗАКОНОМЕРНЫМ результатом деяния, а не случайным совпадением.
-                            </div>
                             <span class="legal-ref">Ст. 8 УК РФ</span>
                         </div>
                     </div>
@@ -739,32 +1304,9 @@
                         <div class="card-content">
                             <span class="card-label">Определение:</span>
                             <p class="card-text"><strong>Субъект преступления</strong> — физическое вменяемое лицо, достигшее возраста уголовной ответственности, совершившее преступление.</p>
-                            <span class="card-label">Обязательные признаки:</span>
-                            <p class="card-text">1. <strong>Физическое лицо</strong> (юр. лица в РФ субъектами УК НЕ являются)<br>2. <strong>Вменяемость</strong> — способность осознавать характер своих действий и руководить ими<br>3. <strong>Достижение возраста уголовной ответственности</strong></p>
                             <span class="card-label">Возраст ответственности (ст. 20 УК):</span>
-                            <p class="card-text">• <strong>Общий возраст — 16 лет</strong><br>• <strong>С 14 лет</strong> — за тяжкие/особо тяжкие: убийство (ст. 105), умышленное причинение вреда здоровью (ст. 111, 112), похищение (ст. 126), изнасилование (ст. 131), кража (ст. 158), грабёж (ст. 161), разбой (ст. 162), вымогательство (ст. 163), угон (ст. 166), терроризм (ст. 205), вандализм (ст. 214) и др.<br>• <strong>С 18 лет</strong> — для специальных составов (должностные, воинские)</p>
-                            <span class="card-label">Специальный субъект:</span>
-                            <p class="card-text">Лицо, обладающее <strong>дополнительными признаками</strong>: должность (должностные преступления), звание (военнослужащие), профессия (врач), пол (изнасилование — мужчина), семейные отношения (неуплата алиментов).</p>
+                            <p class="card-text">• <strong>Общий возраст — 16 лет</strong><br>• <strong>С 14 лет</strong> — за тяжкие/особо тяжкие: убийство (ст. 105), умышленное причинение вреда здоровью (ст. 111, 112), похищение (ст. 126), изнасилование (ст. 131), кража (ст. 158), грабёж (ст. 161), разбой (ст. 162) и др.<br>• <strong>С 18 лет</strong> — для специальных составов (должностные, воинские)</p>
                             <span class="legal-ref">Ст. 19, 20 УК РФ</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="невменяемость психическое расстройство">
-                        <div class="card-header">
-                            <h3 class="card-title">Невменяемость</h3>
-                            <span class="card-badge">Ст. 21 УК РФ</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">Определение:</span>
-                            <p class="card-text"><strong>Невменяемость</strong> — неспособность лица во время совершения общественно опасного деяния осознавать фактический характер и общественную опасность своих действий (бездействия) либо руководить ими вследствие хронического психического расстройства, временного психического расстройства, слабоумия или иного болезненного состояния психики.</p>
-                            <span class="card-label">2 критерия (ОБА обязательны):</span>
-                            <p class="card-text">1. <strong>Медицинский (биологический)</strong> — наличие психического расстройства<br>2. <strong>Юридический (психологический)</strong>:<br>&nbsp;&nbsp;• <em>Интеллектуальный</em> — не мог осознавать<br>&nbsp;&nbsp;• <em>Волевой</em> — не мог руководить</p>
-                            <div class="critical-warning">
-                                Невменяемое лицо <strong>НЕ является субъектом преступления</strong> и НЕ подлежит уголовной ответственности. К нему могут быть применены принудительные меры медицинского характера (гл. 15 УК).
-                            </div>
-                            <span class="card-label">Ограниченная вменяемость (ст. 22 УК):</span>
-                            <p class="card-text">Лицо, которое из-за психического расстройства не могло в полной мере осознавать или руководить — подлежит уголовной ответственности, но расстройство учитывается при назначении наказания и может быть основанием для применения принудительного лечения.</p>
-                            <span class="legal-ref">Ст. 21, 22 УК РФ</span>
                         </div>
                     </div>
 
@@ -779,29 +1321,7 @@
                             <span class="card-label">ОБЯЗАТЕЛЬНЫЙ признак — ВИНА (ст. 24 УК):</span>
                             <p class="card-text"><strong>УМЫСЕЛ</strong> (ст. 25 УК):<br>• <em>Прямой</em> — осознавал опасность, предвидел последствия и <strong>желал</strong> их наступления<br>• <em>Косвенный</em> — осознавал, предвидел, <strong>не желал, но сознательно допускал</strong> или относился безразлично</p>
                             <p class="card-text"><strong>НЕОСТОРОЖНОСТЬ</strong> (ст. 26 УК):<br>• <em>Легкомыслие</em> — предвидел возможность последствий, но <strong>самонадеянно рассчитывал</strong> их предотвратить<br>• <em>Небрежность</em> — <strong>не предвидел</strong>, хотя должен был и мог предвидеть</p>
-                            <span class="card-label">ФАКУЛЬТАТИВНЫЕ признаки:</span>
-                            <p class="card-text">• <strong>Мотив</strong> — внутреннее побуждение (корысть, ревность, хулиганский)<br>• <strong>Цель</strong> — желаемый результат<br>• <strong>Эмоции</strong> — аффект, страх (могут смягчать)</p>
-                            <div class="critical-warning">
-                                <strong>Невиновное причинение вреда (казус, ст. 28 УК)</strong> — НЕ является преступлением! Лицо не осознавало и не могло осознавать опасности ИЛИ не предвидело и не должно было предвидеть последствий.
-                            </div>
                             <span class="legal-ref">Ст. 24-28 УК РФ</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="невиновное причинение вреда казус">
-                        <div class="card-header">
-                            <h3 class="card-title">Невиновное причинение вреда</h3>
-                            <span class="card-badge important">Казус (ст. 28)</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">Определение:</span>
-                            <p class="card-text"><strong>Невиновное причинение вреда (казус)</strong> — деяние признаётся совершённым невиновно, если лицо:<br>1. Не осознавало и по обстоятельствам дела НЕ могло осознавать общественной опасности своих действий<br>2. Не предвидело и НЕ должно было / НЕ могло предвидеть общественно опасных последствий</p>
-                            <span class="card-label">Варианты:</span>
-                            <p class="card-text">• <strong>Субъективный критерий</strong> — не осознавал опасности (внезапное психическое расстройство, аффект от неожиданного воздействия)<br>• <strong>Объективный + субъективный</strong> — не должно было и не могло предвидеть (ситуация вне контроля)<br>• <strong>Психофизиологический</strong> — неспособности лица осознавать опасность из-за несоответствия психофизиологических качеств требованиям экстремальных условий или нервно-психическим перегрузкам</p>
-                            <div class="ok-box">
-                                ✅ При казусе уголовная ответственность <strong>исключена полностью</strong>. Это НЕ преступление.
-                            </div>
-                            <span class="legal-ref">Ст. 28 УК РФ</span>
                         </div>
                     </div>
                 </div>
@@ -818,32 +1338,9 @@
                         <div class="card-content">
                             <span class="card-label">Определение (ст. 32 УК):</span>
                             <p class="card-text"><strong>Соучастие</strong> — умышленное совместное участие <strong>двух или более лиц</strong> в совершении умышленного преступления.</p>
-                            <span class="card-label">Признаки соучастия:</span>
-                            <p class="card-text">1. <strong>Объективный</strong> — участие 2+ лиц, их деяния направлены на одно преступление и находятся в причинной связи<br>2. <strong>Субъективный</strong> — двусторонняя субъективная связь (сговор, общее намерение)</p>
                             <span class="card-label">4 вида соучастников (ст. 33 УК):</span>
-                            <p class="card-text">1. <strong>Исполнитель</strong> — непосредственно совершает преступление (или использует невменяемых, несовершеннолетних)<br>2. <strong>Организатор</strong> — организует совершение или руководит исполнением; создаёт группу<br>3. <strong>Подстрекатель</strong> — склоняет к совершению (уговоры, подкуп, угрозы)<br>4. <strong>Пособник</strong> — содействует советами, указаниями, предоставлением информации, орудий, средств, устранением препятствий, заранее обещанным укрывательством</p>
-                            <div class="warning">
-                                ⚠️ Исполнитель отвечает по статье Особенной части УК. Организатор, подстрекатель, пособник — по статье с ссылкой на ст. 33 УК (например, «ч. 2 ст. 33, ст. 105 УК РФ»).
-                            </div>
+                            <p class="card-text">1. <strong>Исполнитель</strong> — непосредственно совершает преступление<br>2. <strong>Организатор</strong> — организует совершение или руководит исполнением; создаёт группу<br>3. <strong>Подстрекатель</strong> — склоняет к совершению (уговоры, подкуп, угрозы)<br>4. <strong>Пособник</strong> — содействует советами, указаниями, предоставлением информации, орудий, средств</p>
                             <span class="legal-ref">Ст. 32, 33, 34 УК РФ</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="формы соучастия группа сговор">
-                        <div class="card-header">
-                            <h3 class="card-title">Формы соучастия</h3>
-                            <span class="card-badge">Ст. 35 УК РФ</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">4 формы (по степени устойчивости):</span>
-                            <p class="card-text">1. <strong>Группа лиц</strong> — два и более исполнителя без предварительного сговора (совместно)<br>2. <strong>Группа лиц по предварительному сговору</strong> — заранее договорились о совместном совершении<br>3. <strong>Организованная группа</strong> — <strong>устойчивая</strong> группа, созданная для совершения одного или нескольких преступлений<br>4. <strong>Преступное сообщество (организация)</strong> — <strong>структурированная</strong> организованная группа или объединение групп для совершения тяжких/особо тяжких преступлений</p>
-                            <div class="critical-warning">
-                                <strong>Отличие ОПГ от группы:</strong> ОПГ имеет <strong>устойчивость</strong> (стабильный состав, длительность, чёткая иерархия, распределение ролей, планирование). Преступное сообщество — ещё и <strong>сплочённость</strong> и цель получения финансовой/материальной выгоды.
-                            </div>
-                            <div class="info-box">
-                                Совершение преступления ОПГ или преступным сообществом — <strong>квалифицирующий признак</strong>, усиливающий ответственность (более тяжкие части статей).
-                            </div>
-                            <span class="legal-ref">Ст. 35 УК РФ</span>
                         </div>
                     </div>
 
@@ -858,33 +1355,9 @@
                             <div class="critical-warning">
                                 При эксцессе исполнителя другие соучастники <strong>НЕ подлежат уголовной ответственности</strong> за это деяние!
                             </div>
-                            <span class="card-label">Виды эксцесса:</span>
-                            <p class="card-text">1. <strong>Количественный</strong> — исполнитель совершает больше преступлений, чем было задумано (вместо 1 кражи — 3)<br>2. <strong>Качественный</strong> — совершает другое, более тяжкое преступление (договорились о краже, а он совершил убийство)<br>3. <strong>По способу</strong> — использует более опасный способ (договорились о грабеже, а он применил оружие)</p>
                             <span class="card-label">Примеры:</span>
-                            <p class="card-text">• Договорились о краже → исполнитель убил хозяина (соучастники отвечают только за приготовление к краже)<br>• Заказали избиение → исполнитель убил (заказчик не отвечает за убийство, если не желал и не допускал его)<br>• Договорились ограбить один магазин → ограбил три</p>
-                            <div class="warning">
-                                ⚠️ Если соучастники <strong>заранее обещали</strong> скрыть следы преступления, купить похищенное или помочь скрыться — это <strong>НЕ эксцесс</strong>, а заранее обещанное укрывательство/пособничество.
-                            </div>
+                            <p class="card-text">• Договорились о краже → исполнитель убил хозяина (соучастники отвечают только за приготовление к краже)<br>• Заказали избиение → исполнитель убил (заказчик не отвечает за убийство, если не желал и не допускал его)</p>
                             <span class="legal-ref">Ст. 36 УК РФ</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="добровольный отказ от преступления">
-                        <div class="card-header">
-                            <h3 class="card-title">Добровольный отказ</h3>
-                            <span class="card-badge">Ст. 31 УК РФ</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">Определение:</span>
-                            <p class="card-text"><strong>Добровольный отказ</strong> — прекращение лицом приготовления к преступлению либо прекращение действий (бездействия) при покушении, если лицо <strong>осознавало возможность</strong> доведения преступления до конца.</p>
-                            <span class="card-label">Условия:</span>
-                            <p class="card-text">1. <strong>Добровольность</strong> — решение по собственной воле (не из-за внешних обстоятельств)<br>2. <strong>Окончательность</strong> — полный отказ, а не перенос на другое время<br>3. <strong>Своевременность</strong> — до окончания преступления (приготовление или покушение)</p>
-                            <div class="ok-box">
-                                ✅ Лицо, добровольно отказавшееся от доведения преступления до конца, <strong>НЕ подлежит уголовной ответственности</strong>, ЕСЛИ в его фактически совершенных действиях не содержится иного состава преступления.
-                            </div>
-                            <span class="card-label">Особенности для соучастников:</span>
-                            <p class="card-text">• <strong>Организатор/подстрекатель</strong> — должен предотвратить преступление (отговорить, сообщить в органы)<br>• <strong>Пособник</strong> — принять все зависящие от него меры (забрать оружие, не предоставлять информацию)<br>• <strong>Исполнитель</strong> — просто прекратить действия</p>
-                            <span class="legal-ref">Ст. 31 УК РФ</span>
                         </div>
                     </div>
                 </div>
@@ -901,16 +1374,8 @@
                         <div class="card-content">
                             <span class="card-label">Определение:</span>
                             <p class="card-text"><strong>Необходимая оборона</strong> — причинение вреда посягающему при защите личности и прав обороняющегося, других лиц, интересов общества и государства от <strong>общественно опасного посягательства</strong>.</p>
-                            <span class="card-label">Условия правомерности:</span>
-                            <p class="card-text"><strong>Относящиеся к посягательству:</strong><br>• Общественно опасное<br>• Действительное (не мнимое)<br>• Наличное (продолжается, не окончено)</p>
-                            <p class="card-text"><strong>Относящиеся к защите:</strong><br>• Направлена ТОЛЬКО на посягающего<br>• Своевременная (не преждевременная и не запоздалая)<br>• Не превышающая пределов необходимой обороны</p>
                             <span class="card-label">Без ограничений (ч. 1 ст. 37):</span>
                             <p class="card-text">Если посягательство <strong>связано с насилием, опасным для жизни</strong>, или с <strong>непосредственной угрозой</strong> такого насилия — оборона может причинить <strong>ЛЮБОЙ вред</strong> посягающему, включая смерть.</p>
-                            <span class="card-label">Превышение пределов (ст. 37 ч. 2, ст. 108, 114 УК):</span>
-                            <p class="card-text">Явное несоответствие защиты характеру и опасности посягательства. Влечёт ответственность по ст. 108 (убийство — до 2 лет) или ст. 114 (тяжкий вред — до 1 года).</p>
-                            <div class="info-box">
-                                <strong>Мнимая оборона</strong> (ст. 37 ч. 3) — когда реального посягательства не было, но лицо добросовестно заблуждалось. Если не могло осознавать отсутствия посягательства — казус (без ответственности). Если могло — неосторожное преступление.
-                            </div>
                             <span class="legal-ref">Ст. 37, 108, 114 УК РФ</span>
                         </div>
                     </div>
@@ -925,82 +1390,7 @@
                             <p class="card-text"><strong>Крайняя необходимость</strong> — причинение вреда <strong>третьим лицам</strong> (не посягающему!) для устранения опасности, непосредственно угрожающей личности и правам данного лица или иных лиц, интересам общества или государства, если эта опасность <strong>не могла быть устранена иными средствами</strong>.</p>
                             <span class="card-label">Главное условие:</span>
                             <p class="card-text"><strong>Причинённый вред должен быть МЕНЬШЕ предотвращённого.</strong> Это главное отличие от необходимой обороны!</p>
-                            <span class="card-label">Примеры:</span>
-                            <p class="card-text">• Водитель выехал на встречную полосу, чтобы избежать столкновения с пешеходом<br>• Врач использовал чужую кровь для экстренного переливания<br>• При пожаре сломали дверь чужого помещения для спасения людей</p>
-                            <div class="critical-warning">
-                                <strong>Превышение пределов</strong> (ч. 2 ст. 39) — если причинённый вред <strong>равен или больше</strong> предотвращённого. Ответственность наступает только при <strong>умышленном</strong> причинении вреда.
-                            </div>
                             <span class="legal-ref">Ст. 39 УК РФ</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="задержание преступника">
-                        <div class="card-header">
-                            <h3 class="card-title">Задержание преступника</h3>
-                            <span class="card-badge">Ст. 38 УК РФ</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">Определение:</span>
-                            <p class="card-text">Причинение вреда лицу, совершившему преступление, при его задержании для доставления органам власти и пресечения возможности совершения им новых преступлений.</p>
-                            <span class="card-label">Условия правомерности:</span>
-                            <p class="card-text">1. Лицо совершило <strong>преступление</strong> (не проступок, не административное)<br>2. <strong>Иные средства задержания невозможны</strong> (убежит, скроется)<br>3. Вред причинён <strong>только задерживаемому</strong> (не третьим лицам)<br>4. Не превышены необходимые меры</p>
-                            <div class="critical-warning">
-                                <strong>Превышение мер задерживания</strong> (ч. 2 ст. 38) — явное несоответствие обстановке. Влечёт уголовную ответственность за ст. 108 ч. 2 или ст. 114 ч. 2 УК РФ.
-                            </div>
-                            <span class="legal-ref">Ст. 38 УК РФ</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="физическое психическое принуждение">
-                        <div class="card-header">
-                            <h3 class="card-title">Принуждение</h3>
-                            <span class="card-badge">Ст. 40 УК РФ</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">Два вида:</span>
-                            <p class="card-text">1. <strong>Физическое принуждение</strong> — насилие, угроза, ограничение свободы<br>2. <strong>Психическое принуждение</strong> — угрозы, шантаж</p>
-                            <span class="card-label">Правила:</span>
-                            <p class="card-text">• Если лицо <strong>не могло руководить</strong> своими действиями из-за принуждения — <strong>полное освобождение от ответственности</strong><br>• Если возможность руководить <strong>сохранилась</strong> — вопрос решается по правилам крайней необходимости (ст. 39 УК)</p>
-                            <div class="info-box">
-                                Пример: заложника заставили открыть сейф под угрозой расстрела — уголовная ответственность исключена полностью.
-                            </div>
-                            <span class="legal-ref">Ст. 40 УК РФ</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="обоснованный риск эксперимент">
-                        <div class="card-header">
-                            <h3 class="card-title">Обоснованный риск</h3>
-                            <span class="card-badge">Ст. 41 УК РФ</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">Определение:</span>
-                            <p class="card-text">Причинение вреда охраняемым УК интересам при обоснованном риске для достижения общественно полезной цели.</p>
-                            <span class="card-label">Условия:</span>
-                            <p class="card-text">1. Цель <strong>общественно полезная</strong> и не может быть достигнута <strong>не связанными с риском</strong> действиями<br>2. Лицо приняло <strong>достаточные меры</strong> для предотвращения вреда<br>3. Риск <strong>не сопряжён с угрозой для жизни многих людей</strong>, экологической катастрофы или общественного бедствия</p>
-                            <span class="card-label">Примеры:</span>
-                            <p class="card-text">• Испытание новой техники<br>• Медицинские эксперименты<br>• Научные исследования<br>• Промышленные эксперименты</p>
-                            <div class="critical-warning">
-                                Риск <strong>не признаётся обоснованным</strong>, если он заведомо был сопряжён с угрозой для жизни многих людей, экологической катастрофы или общественного бедствия.
-                            </div>
-                            <span class="legal-ref">Ст. 41 УК РФ</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="исполнение приказа или распоряжения">
-                        <div class="card-header">
-                            <h3 class="card-title">Исполнение приказа</h3>
-                            <span class="card-badge">Ст. 42 УК РФ</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">Определение:</span>
-                            <p class="card-text">Причинение вреда охраняемым интересам при исполнении <strong>обязательных</strong> приказа или распоряжения.</p>
-                            <span class="card-label">Условия правомерности:</span>
-                            <p class="card-text">1. Приказ издан <strong>уполномоченным лицом/органом</strong><br>2. Приказ <strong>обязателен</strong> для исполнителя<br>3. Форма и порядок соблюдены<br>4. Исполнитель <strong>не осознавал явной незаконности</strong> приказа</p>
-                            <div class="critical-warning">
-                                <strong>ЯВНО незаконный приказ</strong> не подлежит исполнению! Если исполнитель осознавал его явную незаконность и причинил вред — <strong>он несёт уголовную ответственность</strong>. Начальник, издавший приказ — как подстрекатель.
-                            </div>
-                            <span class="legal-ref">Ст. 42 УК РФ</span>
                         </div>
                     </div>
 
@@ -1012,29 +1402,10 @@
                         <div class="card-content">
                             <span class="card-label">3 стадии:</span>
                             <p class="card-text">1. <strong>Оконченное преступление</strong> — в деянии есть все признаки состава<br>2. <strong>Приготовление</strong> (ст. 30 ч. 1) — приискание, изготовление, приспособление орудий/средств, поиск соучастников, сговор, иное умышленное создание условий при <strong>невозможности</strong> доведения до конца по независящим обстоятельствам<br>3. <strong>Покушение</strong> (ст. 30 ч. 3) — умышленные действия, непосредственно направленные на совершение преступления, если оно не было доведено до конца по <strong>не зависящим</strong> от этого лица обстоятельствам</p>
-                            <span class="card-label">Виды покушения:</span>
-                            <p class="card-text">• <strong>Оконченное</strong> — лицо сделало всё, что считало необходимым, но результат не наступил<br>• <strong>Неоконченное</strong> — не успело выполнить все действия<br>• <strong>Негодное покушение</strong> — на негодный объект или негодными средствами</p>
                             <div class="critical-warning">
                                 <strong>Ответственность:</strong> За приготовление — только к тяжким и особо тяжким преступлениям! Наказание за приготовление — не более 1/2 максимума, за покушение — не более 3/4 максимума (ст. 66 УК).
                             </div>
                             <span class="legal-ref">Ст. 29, 30, 66 УК РФ</span>
-                        </div>
-                    </div>
-
-                    <div class="card theory-card" data-search="множественность преступлений совокупность рецидив">
-                        <div class="card-header">
-                            <h3 class="card-title">Множественность преступлений</h3>
-                            <span class="card-badge">Теория</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-label">Формы множественности:</span>
-                            <p class="card-text">1. <strong>Совокупность преступлений</strong> (ст. 17 УК) — лицо совершает <strong>2+ преступления</strong>, ни за одно из которых не осуждено (кроме случаев, когда совершение 2+ преступлений предусмотрено как обстоятельство, влекущее более строгое наказание). Наказания складываются по правилам ст. 69 УК<br>2. <strong>Рецидив</strong> (ст. 18 УК) — совершение умышленного преступления лицом, имеющим судимость за ранее совершённое умышленное преступление</p>
-                            <span class="card-label">Виды рецидива:</span>
-                            <p class="card-text">• <strong>Простой</strong> — 2 умышленных преступления<br>• <strong>Опасный</strong> — 2 тяжких или 3+ средней тяжести с реальным лишением свободы<br>• <strong>Особо опасный</strong> — 3 тяжких или 2 особо тяжких, или сочетание тяжких и особо тяжких</p>
-                            <div class="warning">
-                                ⚠️ Рецидив — <strong>отягчающее</strong> обстоятельство (п. «а» ч. 1 ст. 63 УК) и влияет на вид исправительного учреждения (ст. 58 УК).
-                            </div>
-                            <span class="legal-ref">Ст. 17, 18, 69 УК РФ</span>
                         </div>
                     </div>
                 </div>
@@ -1122,13 +1493,12 @@
         <div class="footer">
             <p>⚖️ Справочник составлен на основе действующего законодательства РФ (2024–2026)</p>
             <p>ФЗ №63 «Об адвокатуре» · УПК РФ · ГПК РФ · КАС РФ · АПК РФ · ФЗ «О статусе военнослужащих»</p>
-            <p style="margin-top: 10px; opacity: 0.5;">Файл: index.html | GitHub Pages</p>
         </div>
     </div>
 
     <script>
-        // Инициализация обработчиков событий
         document.addEventListener('DOMContentLoaded', function() {
+            // Обработчики для главных кнопок навигации
             document.querySelectorAll('.main-nav-btn').forEach(function(btn) {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1137,6 +1507,7 @@
                 });
             });
 
+            // Обработчики для вкладок
             document.querySelectorAll('.tab-btn').forEach(function(btn) {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1145,20 +1516,32 @@
                 });
             });
 
+            // Обработчик поиска
             document.getElementById('searchInput').addEventListener('input', handleSearch);
         });
 
         function switchMainSection(sectionType, btn) {
+            // Убираем active со всех кнопок
             document.querySelectorAll('.main-nav-btn').forEach(function(b) {
                 b.classList.remove('active');
             });
+            
+            // Добавляем active к текущей кнопке
             btn.classList.add('active');
+            
+            // Скрываем все секции
             document.querySelectorAll('.section').forEach(function(s) {
                 s.classList.remove('active');
             });
+            
+            // Показываем нужную секцию
             var sectionId = sectionType + '-section';
             document.getElementById(sectionId).classList.add('active');
+            
+            // Очищаем поиск
             document.getElementById('searchInput').value = '';
+            
+            // Сбрасываем видимость карточек
             var activeSection = document.querySelector('.section.active');
             if (activeSection) {
                 activeSection.querySelectorAll('.card, tr').forEach(function(el) {
@@ -1169,27 +1552,40 @@
 
         function switchSubTab(btn, tabId) {
             var section = btn.closest('.section');
-            var isMilitary = section.id === 'military-section';
-            var isCivil = section.id === 'civil-section';
-            var isFaq = section.id === 'faq-section';
-            var isTheory = section.id === 'theory-section';
             
+            // Скрываем все под-секции
             section.querySelectorAll('.sub-section').forEach(function(s) {
                 s.classList.remove('active');
             });
+            
+            // Показываем нужную под-секцию
             var targetSection = document.getElementById(tabId);
             if (targetSection) {
                 targetSection.classList.add('active');
             }
+            
+            // Убираем active со всех вкладок
             section.querySelectorAll('.tab-btn').forEach(function(b) {
                 b.classList.remove('active');
-                b.classList.remove('military', 'civil', 'faq', 'theory');
+                b.classList.remove('military', 'civil', 'questions', 'theory', 'faq');
             });
+            
+            // Определяем тип секции
+            var isMilitary = section.id === 'military-section';
+            var isCivil = section.id === 'civil-section';
+            var isFaq = section.id === 'faq-section';
+            var isQuestions = section.id === 'questions-section';
+            var isTheory = section.id === 'theory-section';
+            
+            // Добавляем active к текущей вкладке
             btn.classList.add('active');
             if (isMilitary) btn.classList.add('military');
             if (isCivil) btn.classList.add('civil');
             if (isFaq) btn.classList.add('faq');
+            if (isQuestions) btn.classList.add('questions');
             if (isTheory) btn.classList.add('theory');
+            
+            // Очищаем поиск
             document.getElementById('searchInput').value = '';
         }
 
@@ -1197,9 +1593,12 @@
             var term = e.target.value.toLowerCase();
             var activeSection = document.querySelector('.section.active');
             var activeSubSection = activeSection.querySelector('.sub-section.active');
+            
             if (!activeSubSection) return;
+            
             var cards = activeSubSection.querySelectorAll('.card');
             var tableRows = activeSubSection.querySelectorAll('tbody tr');
+            
             cards.forEach(function(card) {
                 var searchData = card.getAttribute('data-search') || '';
                 var text = card.textContent.toLowerCase() + ' ' + searchData.toLowerCase();
@@ -1209,6 +1608,7 @@
                     card.classList.add('hidden');
                 }
             });
+            
             tableRows.forEach(function(row) {
                 var text = row.textContent.toLowerCase();
                 if (!term || text.indexOf(term) !== -1) {
@@ -1224,6 +1624,7 @@
             var tbody = table.querySelector('tbody');
             var rows = Array.from(tbody.querySelectorAll('tr'));
             var isAscending = table.dataset.sortOrder !== 'asc';
+            
             rows.sort(function(a, b) {
                 var aText = a.children[columnIndex].textContent.trim();
                 var bText = b.children[columnIndex].textContent.trim();
@@ -1231,9 +1632,11 @@
                     aText.localeCompare(bText, 'ru') : 
                     bText.localeCompare(aText, 'ru');
             });
+            
             rows.forEach(function(row) {
                 tbody.appendChild(row);
             });
+            
             table.dataset.sortOrder = isAscending ? 'asc' : 'desc';
         }
     </script>
